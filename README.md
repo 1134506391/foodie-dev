@@ -1,2 +1,0 @@
-# foodie-dev
-foodie-dev
