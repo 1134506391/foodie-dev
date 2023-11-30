@@ -103,5 +103,6 @@ public class AddressServiceImpl implements AddressService {
         defaultAddress.setId(addressId);
         defaultAddress.setUserId(userId);
         defaultAddress.setIsDefault(YesOrNo.YES.type);
+        userAddressMapper.updateByPrimaryKeySelective(defaultAddress);
         }
     }
