@@ -10,6 +10,9 @@
     </parent>
 
     <artifactId>foodie-dev-api</artifactId>
+    <!--<packaging>jar</packaging>-->
+    <!-- 打包war [1] -->
+    <packaging>war</packaging>
     <dependencies>
         <!--
             common-mail
