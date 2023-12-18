@@ -4,16 +4,16 @@ server:
 spring:
   redis:
     # Redis 单机单实例
-#    database: 0
-#    host: 192.168.153.129
-#    port: 6379
+    database: 0
+    host: 192.168.153.129
+    port: 6379
 #    password: 439901
     # Redis 哨兵模式
-   database: 1
-   password: "imooc"
-   sentinel:
-      master: imooc-master
-      nodes: 192.168.1.191:26379,192.168.1.192:26379,192.168.1.193:26379
+    #    database: 1
+    #    password: imooc
+    #    sentinel:
+    #      master: imooc-master
+    #      nodes: 192.168.1.191:26379,192.168.1.192:26379,192.168.1.193:26379
     # Redis 集群模式
 #    password: imooc
 #    cluster:
