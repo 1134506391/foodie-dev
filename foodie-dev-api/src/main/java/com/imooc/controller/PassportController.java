@@ -3,6 +3,7 @@ package com.imooc.controller;
 import com.imooc.pojo.Users;
 import com.imooc.pojo.bo.ShopcartBO;
 import com.imooc.pojo.bo.UserBO;
+import com.imooc.pojo.vo.UsersVO;
 import com.imooc.service.UserService;
 import com.imooc.utils.*;
 import io.swagger.annotations.Api;
@@ -80,16 +81,20 @@ public class PassportController extends BaseController{
         }
 
         // 4. 实现注册
+        // 4. 实现注册
         Users userResult = userService.createUser(userBO);
 
-        userResult = setNullProperty(userResult);
+//        userResult = setNullProperty(userResult);
+
+        // 实现用户的redis会话
+        UsersVO usersVO = conventUsersVO(userResult);
 
         CookieUtils.setCookie(request, response, "user",
-                JsonUtils.objectToJson(userResult), true);
+                JsonUtils.objectToJson(usersVO), true);
 
-        // TODO 生成用户token，存入redis会话
         // 同步购物车数据
         synchShopcartData(userResult.getId(), request, response);
+
         return IMOOCJSONResult.ok();
     }
 
@@ -116,15 +121,15 @@ public class PassportController extends BaseController{
             return IMOOCJSONResult.errorMsg("用户名或密码不正确");
         }
 
-        userResult = setNullProperty(userResult);
+//        userResult = setNullProperty(userResult);
+
+        // 实现用户的redis会话
+        UsersVO usersVO = conventUsersVO(userResult);
 
         CookieUtils.setCookie(request, response, "user",
-                JsonUtils.objectToJson(userResult), true);
+                JsonUtils.objectToJson(usersVO), true);
 
-
-        // TODO 生成用户token，存入redis会话
         // 同步购物车数据
-
         synchShopcartData(userResult.getId(), request, response);
 
         return IMOOCJSONResult.ok(userResult);
@@ -225,8 +230,11 @@ public class PassportController extends BaseController{
         // 清除用户的相关信息的cookie
         CookieUtils.deleteCookie(request, response, "user");
 
-        // TODO 用户退出登录，需要清空购物车
-        // TODO 分布式会话中需要清除用户数据
+        // 用户退出登录，清除redis中user的会话信息
+        redisOperator.del(REDIS_USER_TOKEN + ":" + userId);
+
+        // 分布式会话中需要清除用户数据
+        CookieUtils.deleteCookie(request, response, FOODIE_SHOPCART);
 
         return IMOOCJSONResult.ok();
     }

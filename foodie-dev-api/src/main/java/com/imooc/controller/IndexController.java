@@ -113,8 +113,6 @@ public class IndexController {
         } else {
             list = JsonUtils.jsonToList(catsStr, CategoryVO.class);
         }
-
-//        List<CategoryVO> list = categoryService.getSubCatList(rootCatId);
         return IMOOCJSONResult.ok(list);
     }
 
